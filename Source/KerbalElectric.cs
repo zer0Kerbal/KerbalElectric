@@ -8,12 +8,11 @@ using KSP.Localization;
 namespace ModuleKELight
 {
 
-    //ModuleLight assumes all light animations are length 1;
-
     public class ModuleKELight : PartModule, IResourceConsumer
     {
         #region Vars
 
+        private bool dodebug = true;
         private bool blinkOn = false;
         private float blinkOnTime = 0.0f;
         private float blinkOffTime = 0.0f;
@@ -46,6 +45,14 @@ namespace ModuleKELight
         #endregion
 
         #region Fields        
+        [KSPField]
+        public bool isSlime = false;
+
+        [KSPField]
+        public string slimeLensOn;
+
+        [KSPField]
+        public string slimeLensOff;
 
         [KSPField]
         public bool useResources;
@@ -62,14 +69,20 @@ namespace ModuleKELight
         [KSPField]
         public string tiltAnimationName;
 
+        [KSPField(isPersistant = true)]
+        public float panTime = 0.0f;
+
+        [KSPField(isPersistant = true)]
+        public float tiltTime = 0.0f;
+
         [KSPField]
         public float resourceAmount = 0.01f;
 
         [KSPField]
-        public bool useAnimationDim;
+        public bool useAnimationDim = false;
 
         [KSPField]
-        public bool useAutoDim;
+        public bool useAutoDim = false;
 
         [KSPField]
         public float lightBrightenSpeed = 0.3f;
@@ -123,7 +136,10 @@ namespace ModuleKELight
         public float tiltSpeed = 0.01f;
 
         [KSPField]
-        public bool PanTilt = false;
+        public bool PanningOn = false;
+
+        [KSPField]
+        public bool TiltingOn = false;
 
         [KSPField]
         public bool canBlink = true;
@@ -252,7 +268,7 @@ namespace ModuleKELight
         {
             PopupDialog.SpawnPopupDialog(new Vector2(0.5f, 0.5f),
                 new Vector2(0.5f, 0.5f),
-                new MultiOptionDialog("","Light Position",
+                new MultiOptionDialog("", "Light Position - Click pan once to start, again to stop.",
                     "Kerbal Electric",
                     HighLogic.UISkin,
                     new Rect(0.5f, 0.5f, 150f, 60f),
@@ -292,14 +308,21 @@ namespace ModuleKELight
             Debug.Log("Switching Colors");
             string[] colorData = lightColorList[selectedColor].Split(',');
             currentColorName = colorData[0];
+            lightB = (float)Convert.ToDouble(colorData[3]) / 255;
+            lightR = (float)Convert.ToDouble(colorData[1]) / 255;
+            lightG = (float)Convert.ToDouble(colorData[2]) / 255;
             foreach (Light L in myLights)
             {
-                lightB = (float)Convert.ToDouble(colorData[3]) / 255;
-                lightR = (float)Convert.ToDouble(colorData[1]) / 255;
-                lightG = (float)Convert.ToDouble(colorData[2]) / 255;
                 L.color = new Color(lightR, lightG, lightB, 1);
             }
-            Debug.Log("Colors Switched");
+            if (isSlime)
+            {
+                SetLens(new Color(lightR, lightG, lightB, 1));
+            }
+            if (dodebug)
+            {
+                Debug.Log("Colors Switched");
+            }
         }
 
         public void animDoPlay(float animTime, float animSpeed)
@@ -311,57 +334,55 @@ namespace ModuleKELight
 
         public void doPanAnim(bool turnLeft)
         {
+            PanningOn = !PanningOn;
             if (panAnimation == null)
             {
                 GetAnims();
             }
-            if (panAnimation == null)
+            if (panAnimation != null)
             {
-                Debug.Log("Panning Animation Not Found");
-                return;
-            }
-            if (panAnimation[panAnimationName].normalizedSpeed != 0)
-            {
-                panAnimation[panAnimationName].normalizedSpeed = 0;
-            }
-            else
-            {
-                if (!turnLeft)
+                if (!PanningOn)
                 {
-                    panAnimation[panAnimationName].normalizedSpeed = panSpeed;
-
+                    panAnimation[panAnimationName].normalizedSpeed = 0;
                 }
                 else
                 {
-                   panAnimation[panAnimationName].normalizedSpeed = panSpeed * -1f;
+                    if (!turnLeft)
+                    {
+                        panAnimation[panAnimationName].normalizedSpeed = panSpeed;
+
+                    }
+                    else
+                    {
+                        panAnimation[panAnimationName].normalizedSpeed = panSpeed * -1f;
+                    }
                 }
             }
         }
 
         public void doTiltAnim(bool upward)
         {
+            TiltingOn = !TiltingOn;
             if (tiltAnimation == null)
             {
                 GetAnims();
             }
-            if (tiltAnimation == null)
+            if (tiltAnimation != null)
             {
-                Debug.Log("Tilt Animation Not Found");
-                return;
-            }
-            if (tiltAnimation[tiltAnimationName].normalizedSpeed != 0)
-            {
-                tiltAnimation[tiltAnimationName].normalizedSpeed = 0;
-            }
-            else
-            {
-                if (upward)
+                if (!TiltingOn)
                 {
-                   tiltAnimation[tiltAnimationName].normalizedSpeed = tiltSpeed;
+                    tiltAnimation[tiltAnimationName].normalizedSpeed = 0;
                 }
                 else
                 {
-                   tiltAnimation[tiltAnimationName].normalizedSpeed = tiltSpeed * -1f;
+                    if (upward)
+                    {
+                        tiltAnimation[tiltAnimationName].normalizedSpeed = tiltSpeed;
+                    }
+                    else
+                    {
+                        tiltAnimation[tiltAnimationName].normalizedSpeed = tiltSpeed * -1f;
+                    }
                 }
             }
         }
@@ -390,22 +411,43 @@ namespace ModuleKELight
             }
             else //toggling the light on and off
             {
-                if (HighLogic.LoadedSceneIsEditor && partAnimState != null)
+                if (isSlime)
                 {
-                    if (partAnimState != null)
+                    foreach (Renderer R in rend)
                     {
-                        animDoPlay((!state) ? 0f : 1, 0.0f);//toggle the light
+                        if (R.name == slimeLensOn)
+                        {
+                            R.enabled = state;
+                        }
+                        if (R.name == slimeLensOff)
+                        {
+                            R.enabled = !state;
+                        }
                     }
-                }
-                else if (HighLogic.LoadedSceneIsFlight && partAnimState != null)
-                {
-                    animDoPlay((!state) ? 0f : 1, 0.0f);//toggle the light
-                }
-                else
-                {
                     foreach (Light L in myLights)
                     {
                         L.enabled = state;
+                    }
+                }
+                else
+                {
+                    if (HighLogic.LoadedSceneIsEditor && partAnimState != null)
+                    {
+                        if (partAnimState != null)
+                        {
+                            animDoPlay((!state) ? 0f : 1, 0.0f);//toggle the light
+                        }
+                    }
+                    else if (HighLogic.LoadedSceneIsFlight && partAnimState != null)
+                    {
+                        animDoPlay((!state) ? 0f : 1, 0.0f);//toggle the light
+                    }
+                    else
+                    {
+                        foreach (Light L in myLights)
+                        {
+                            L.enabled = state;
+                        }
                     }
                 }
             }
@@ -469,13 +511,15 @@ namespace ModuleKELight
                 if (animation[panAnimationName] != null)
                 {
                     panAnimation = animation;
-                    panAnimation[panAnimationName].normalizedSpeed = 0f;
+                    panAnimation[panAnimationName].normalizedSpeed = 0;
+                    panAnimation[panAnimationName].normalizedTime = panTime;
                     panAnimation.Play();
                 }
                 if (animation[tiltAnimationName] != null)
                 {
                     tiltAnimation = animation;
-                    tiltAnimation[tiltAnimationName].normalizedSpeed = 0f;
+                    tiltAnimation[tiltAnimationName].normalizedSpeed = 0;
+                    tiltAnimation[tiltAnimationName].normalizedTime = tiltTime;
                     tiltAnimation.Play();
                 }
                 i++;
@@ -530,7 +574,6 @@ namespace ModuleKELight
 
         public override void OnLoad(ConfigNode node)
         {
-            Debug.Log("Loading Started");
             if (resHandler.inputResources.Count == 0)
             {
                 ModuleResource moduleResource = new ModuleResource();
@@ -540,7 +583,6 @@ namespace ModuleKELight
                 moduleResource.rate = (double)resourceAmount;
                 resHandler.inputResources.Add(moduleResource);
             }
-             Debug.Log("Loading Ended");
         }
 
         public override void OnStart(StartState state)
@@ -558,14 +600,11 @@ namespace ModuleKELight
                 Fields["blinkDuration"].guiActiveEditor = false;
                 Fields["blinkDelay"].guiActiveEditor = false;
             }
-            if (!PanTilt)
-            {
-                Fields["panSpeed"].guiActive = false;
-                Fields["panSpeed"].guiActiveEditor = false;
-                Fields["tiltSpeed"].guiActive = false;
-                Fields["tiltSpeed"].guiActiveEditor = false;
-                Events["PanTiltAction"].active = false;
-            }
+            //Fields["panSpeed"].guiActive = false;
+            //Fields["panSpeed"].guiActiveEditor = false;
+            //Fields["tiltSpeed"].guiActive = false;
+            //Fields["tiltSpeed"].guiActiveEditor = false;
+            //Events["PanTiltAction"].active = false;
             rend = part.GetComponentsInChildren<Renderer>();
             GetAnims();
             myLights = part.GetComponentsInChildren<Light>();
@@ -595,6 +634,16 @@ namespace ModuleKELight
 
         public void FixedUpdate()
         {
+            if (tiltAnimation[tiltAnimationName].normalizedTime > 1)
+            {
+                tiltAnimation[tiltAnimationName].normalizedTime = 1;
+                TiltingOn = false;
+            }
+            if (tiltAnimation[tiltAnimationName].normalizedTime < 0)
+            {
+                tiltAnimation[tiltAnimationName].normalizedTime = 0;
+                TiltingOn = false;
+            }
             if (HighLogic.LoadedSceneIsEditor)
             {
                 currentColor = new Color(lightR, lightG, lightB, 1);
@@ -617,35 +666,6 @@ namespace ModuleKELight
                     if (resourceFraction < 0.99f)
                     {
                         SetLight(false);
-                    }
-                }
-            }
-            if (PanTilt)
-            {
-                if (tiltAnimation[tiltAnimationName].wrapMode != WrapMode.Loop)
-                {
-                    if (tiltAnimation[tiltAnimationName].normalizedTime > 1)
-                    {
-                        tiltAnimation[tiltAnimationName].normalizedSpeed = 0;
-                        tiltAnimation[tiltAnimationName].normalizedTime = 1;
-                    }
-                    if (tiltAnimation[tiltAnimationName].normalizedTime < 0)
-                    {
-                        tiltAnimation[tiltAnimationName].normalizedSpeed = 0;
-                        tiltAnimation[tiltAnimationName].normalizedTime = 0;
-                    }
-                }
-                if (panAnimation[panAnimationName].wrapMode != WrapMode.Loop)
-                {
-                    if (panAnimation[panAnimationName].normalizedTime > 1)
-                    {
-                        panAnimation[panAnimationName].normalizedSpeed = 0;
-                        panAnimation[panAnimationName].normalizedTime = 1;
-                    }
-                    if (panAnimation[panAnimationName].normalizedTime < 0)
-                    {
-                        panAnimation[panAnimationName].normalizedSpeed = 0;
-                        panAnimation[panAnimationName].normalizedTime = 0;
                     }
                 }
             }

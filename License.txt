@@ -1,4 +1,4 @@
-Copyright (c) 2015, DataInterlock
+KerbalElectric and the ModuleKELights is Copyright (c) 2017, DataInterlock
 
 Creative Commons Attribution-NonCommercial 4.0 International Public License
 
