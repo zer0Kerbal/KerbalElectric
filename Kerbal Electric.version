@@ -2,11 +2,11 @@
 	"NAME": "KerbalElectric",
 	"URL": "http://www.datainterlock.com/Kerbaltopia/AVCCheck.php?id=4",
 	"DOWNLOAD": "http://kerbal.curseforge.com/projects/kerbal-electric",
-	"VERSION": {
-		"MAJOR": 0,
-		"MINOR": 1,
-		"PATCH": 0,
-		"BUILD": 1
+	"VERSION":{
+		"MAJOR":0,
+		"MINOR":1,
+		"PATCH":0,
+		"BUILD":1
 	}, 
     "KSP_VERSION": {
         "MAJOR": 1, 
