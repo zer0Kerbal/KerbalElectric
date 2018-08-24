@@ -55,10 +55,14 @@ In your KSP GameData folder, delete any existing EditorExtensions folder. Downlo
 * Community Category Kit
 	+ [GitHub](https://github.com/BobPalmer/CommunityCategoryKit)
 
+### License
+
+CC-BY-SA-NC 4.0. See [here](./LICENSE)
+
 
 ## UPSTREAM
 
-* [Fengist](https://forum.kerbalspaceprogram.com/index.php?/profile/78435-fengist/) ROOT (partial history only - don't ask, the guy just deleted older stuff)
+* [Fengist](https://forum.kerbalspaceprogram.com/index.php?/profile/78435-fengist/) ROOT / Current Maintainer
 	+ [Forum](https://forum.kerbalspaceprogram.com/index.php?/topic/165449-wip-14x-kerbal-electric-idiot-lights-duh-slime-lights-yuk/&)
-	+ [CurseForge](https://kerbal.curseforge.com/projects/kerbal-electric)
-	+ [GitHub](https://github.com/Fengist/ModuleKELights)
+	+ [CurseForge](https://kerbal.curseforge.com/projects/kerbal-electric) (partial history only)
+	+ [GitHub](https://github.com/Fengist/ModuleKELights) (partial history only - don't ask, the guy just deleted older stuff)
