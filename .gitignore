@@ -1,2 +1,9 @@
-Source/bin
-Source/obj
+.vs
+bin
+obj
+GameData/*/*.version
+GameData/*/README.md
+GameData/*/CHANGE_LOG.md
+GameData/*/LICENSE
+GameData/*/Plugin/*.dll
+Source/Properties/Version.cs
