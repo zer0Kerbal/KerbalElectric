@@ -634,7 +634,14 @@ namespace ModuleKELight
 
         public void FixedUpdate()
         {
-            if (tiltAnimation[tiltAnimationName].normalizedTime > 1)
+			if (null == tiltAnimation)
+			{
+#if DEBUG
+				Debug.LogError("[Kerbal Electric] tiltAnimation is null!");
+#endif
+				return;
+			}
+			if (tiltAnimation[tiltAnimationName].normalizedTime > 1)
             {
                 tiltAnimation[tiltAnimationName].normalizedTime = 1;
                 TiltingOn = false;
