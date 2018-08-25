@@ -1,26 +1,33 @@
 {
-	"NAME": "KerbalElectric",
-	"URL": "http://www.datainterlock.com/Kerbaltopia/AVCCheck.php?id=4",
-	"DOWNLOAD": "http://kerbal.curseforge.com/projects/kerbal-electric",
+	"NAME":		"Kerbal Electric Unofficial",
+	"URL":		"https://raw.githubusercontent.com/net-lisias-kspu/ContractConfigurator/master/ModuleKELights.version",
+	"DOWNLOAD":	"https://github.com/net-lisias-kspu/ModuleKELights/releases",
+	"CHANGE_LOG":	"https://github.com/net-lisias-kspu/ModuleKELights/master/CHANGE_LOG.md",
+	"CHANGE_LOG_URL":"https://raw.githubusercontent.com/net-lisias-kspu/ModuleKELights/CHANGES.md",
+	"GITHUB":{
+		"USERNAME":"net-lisias-kspu",
+		"REPOSITORY":"ModuleKELights",
+		"ALLOW_PRE_RELEASE":false
+		},
 	"VERSION":{
 		"MAJOR":0,
 		"MINOR":1,
 		"PATCH":0,
 		"BUILD":1
-	}, 
-    "KSP_VERSION": {
-        "MAJOR": 1, 
-        "MINOR": 4, 
-        "PATCH": 0
-    }, 
-    "KSP_VERSION_MAX": {
-        "MAJOR": 1, 
-        "MINOR": 4, 
-        "PATCH": 99
-    }, 
-    "KSP_VERSION_MIN": {
-        "MAJOR": 1, 
-        "MINOR": 4, 
-        "PATCH": 0
-    }
+		},
+	"KSP_VERSION":{
+		"MAJOR":1,
+		"MINOR":4,
+		"PATCH":3
+		},
+	"KSP_VERSION_MIN":{
+		"MAJOR":1,
+		"MINOR":4,
+		"PATCH":0
+		},
+	"KSP_VERSION_MAX":{
+		"MAJOR":1,
+		"MINOR":4,
+		"PATCH":3
+		}
 }
