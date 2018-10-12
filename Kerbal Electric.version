@@ -1,14 +1,14 @@
 {
-	"NAME":		"Kerbal Electric Unofficial",
-	"URL":		"https://raw.githubusercontent.com/net-lisias-kspu/ContractConfigurator/master/ModuleKELights.version",
-	"DOWNLOAD":	"https://github.com/net-lisias-kspu/ModuleKELights/releases",
-	"CHANGE_LOG":	"https://github.com/net-lisias-kspu/ModuleKELights/master/CHANGE_LOG.md",
-	"CHANGE_LOG_URL":"https://raw.githubusercontent.com/net-lisias-kspu/ModuleKELights/CHANGES.md",
 	"GITHUB":{
 		"USERNAME":"net-lisias-kspu",
 		"REPOSITORY":"ModuleKELights",
 		"ALLOW_PRE_RELEASE":false
 		},
+	"NAME"		: "Kerbal Electric Unofficial",
+	"URL"		: "https://raw.githubusercontent.com/net-lisias-kspu/ContractConfigurator/master/ModuleKELights.version",
+	"DOWNLOAD"	: "https://github.com/net-lisias-kspu/ModuleKELights/releases",
+	"CHANGE_LOG"	: "https://github.com/net-lisias-kspu/ModuleKELights/master/CHANGE_LOG.md",
+	"CHANGE_LOG_URL": "https://raw.githubusercontent.com/net-lisias-kspu/ModuleKELights/CHANGES.md",
 	"VERSION":{
 		"MAJOR":0,
 		"MINOR":1,
