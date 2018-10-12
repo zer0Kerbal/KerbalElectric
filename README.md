@@ -6,9 +6,9 @@ https://kerbal.curseforge.com/projects/kerbal-electric
 
 ## In a Hurry
 
-* [Releases](https://github.com/net-lisias-kspu/ModuleKELights/tree/Archive)
-* [Source](https://github.com/net-lisias-kspu/ModuleKELights)
 * [Latest Release](https://github.com/net-lisias-kspu/ModuleKELights/releases)
+	+ [Binaries](https://github.com/net-lisias-kspu/ModuleKELights/tree/Archive)
+* [Source](https://github.com/net-lisias-kspu/ModuleKELights)
 * [Change Log](./CHANGE_LOG.md)
 
 
