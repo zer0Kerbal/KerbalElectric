@@ -34,3 +34,6 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion(ModuleKELights.Version.Number)]
 [assembly: AssemblyFileVersion(ModuleKELights.Version.Number)]
+[assembly: AssemblyInformationalVersionAttribute("@FULL_VERSION@")]
+
+
